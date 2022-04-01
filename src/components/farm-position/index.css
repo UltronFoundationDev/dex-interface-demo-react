@@ -1,0 +1,26 @@
+.farm-position {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 18px;
+  border: 1px solid #6eacbf;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background-color: #6eacbf;
+}
+
+.farm-position__tokens {
+
+}
+
+.farm-position__liquid {
+
+}
+
+.farm-position__earn {
+
+}
+
+.farm-position__btn {
+
+}

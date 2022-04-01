@@ -1,0 +1,175 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #2e3f7d;
+  color: #fff;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.app {
+  text-align: center;
+  overflow: hidden;
+  overflow-y: auto;
+  background-color: #2e3f7d;
+}
+
+.circle-arrow {
+  margin-top: 60px;
+  cursor: pointer;
+}
+
+.circle-arrow {
+  margin-right: 30px;
+}
+
+.convert__btns {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.convert__btns-btn.active {
+  background-color: #00CD8A;
+  color: #fff;
+  border: 1px solid #00CD8A;
+}
+
+.convert__btns-btn {
+  padding: 10px 20px;
+  border: 1px solid #818181;
+  cursor: pointer;
+}
+
+.convert__btns-btn:hover {
+  background-color: #4ed4a8;
+  color: #fff;
+  border: 1px solid #4ed4a8;
+}
+
+.convert__input {
+  text-align: left;
+}
+
+.convert__input-label {
+  border: 1px solid #818181;
+  height: 120px;
+  position: relative;
+  display: block;
+}
+
+.convert__input-label input {
+  border: none;
+  border-bottom: 1px solid #818181;
+  border-right: 1px solid #818181;
+  font-size: 30px;
+  padding-top: 10px;
+  padding-left: 15px;
+  color: #fff;
+  background-color: transparent;
+}
+
+.convert__input-label input:focus-visible {
+  outline: none;
+}
+
+.convert__input-label__value {
+  position: absolute;
+  width: 100%;
+  bottom: 10px;
+  left: 20px;
+  color: #a9a6a6;
+  text-transform: uppercase;
+}
+
+.app__swap-btn {
+  margin: 40px auto 0;
+  width: 300px;
+
+}
+
+.convert + .convert {
+  margin-top: 30px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.header-menu {
+  color: #fff;
+}
+
+.header-menu a {
+  margin-left: 20px;
+}
+
+.my-position {
+  margin-top: 40px;
+}
+
+.my-position h3 {
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+.my-position__lists {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.my-position__lists:not(.liquid-position) {
+  justify-content: center;
+}
+
+.liquid-position {
+  text-align: left;
+  border: 1px solid;
+  width: 260px;
+  padding: 2px 6px;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.liquid-position:nth-child(n) {
+  margin-left: 20px;
+}
+
+.liquid-position__drop {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  color: #de4343;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.swap__info-swapping {
+  border: 1px solid;
+  border-radius: 4px;
+  margin: 20px auto;
+  padding: 10px 20px;
+  width: max-content;
+}
+
+.swap__info-swapping:nth-child(n) {
+  margin-bottom: 20px;
+}
+
+.swap__info-swapping span {
+  font-weight: 600;
+}
+
+.swap__info-swapping__slippage input{
+  width: 60px;
+  margin-left: 10px;
+}

@@ -1,0 +1,12 @@
+.modal-farm {
+  background-color: #49acb6;
+  padding: 10px 0;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.modal-farm__block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

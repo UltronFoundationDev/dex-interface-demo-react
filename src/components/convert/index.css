@@ -1,0 +1,19 @@
+.convert {
+  position: relative;
+}
+
+.convert__modal-token-list span {
+  position: absolute;
+  right: 14px;
+  top: 6px;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.convert__input-label__balance {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  color: #a9a6a6;
+  text-transform: uppercase;
+}

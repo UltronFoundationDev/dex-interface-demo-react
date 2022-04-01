@@ -1,0 +1,16 @@
+.wallet-connect {
+  text-align: right;
+}
+
+.wallet-connect__title {
+  display: inline-block;
+  border: 1px solid;
+  padding: 5px 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.wallet-connect__title:hover {
+  background-color: #9fd5c4;
+  color: #fff;
+}

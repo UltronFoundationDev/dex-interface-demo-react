@@ -1,0 +1,25 @@
+.modal-description {
+  border: 1px solid #000;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 16px;
+  background-color: #99e4fb;
+  min-width: 40%;
+  color: #000;
+}
+
+.modal-description__exchange-token {
+  border: 1px solid #000;
+  border-radius: 6px;
+  padding: 4px 8px;
+  margin-bottom: 10px;
+}
+
+.modal-description__token-price {
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+.modal-description__token-btn {
+  width: 100%;
+}
