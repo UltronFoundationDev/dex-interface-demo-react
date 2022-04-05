@@ -558,4 +558,4 @@ export const abiAceLab = [
     "type": "function"
   }
 ]
-export const acelabAddress = '0x99546DC551cdf28C93B45b52EEaC4B9Fd7f1712D';
+export const acelabAddress = '0xC82Abb2C476A5564E2bc872B100e3a2268c965bD';

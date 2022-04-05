@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch} from "react-redux";
 import {currencyTokenInAddress} from "../../utils/currencyTokenInAddress";
 import {setTokenForSwap} from "../../redux/reducers/tokens";
+import {toFixed} from "../../utils/fixedValue";
 import ModalTokenList from "../modal-token-list";
 import './index.css';
 
@@ -35,7 +36,7 @@ const Convert = ({value, onChange, setFocus, convertValue, currentValueName, cur
         <label className="convert__input-label">
           <input value={value} onChange={onChange} onFocus={onFocus} onBlur={onBlur} type="number"/>
           <span className="convert__input-label__value">
-            1 {currentValueName} = {convertValue ? convertValue.toFixed(2) : 1} {currentConvertValueName}
+            1 {currentValueName} = {convertValue ? toFixed(convertValue) : 1} {currentConvertValueName}
           </span>
           <span className="convert__input-label__balance">
             {balanceToken} {currentValueName}

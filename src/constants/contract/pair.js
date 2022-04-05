@@ -652,6 +652,4 @@ const abiPair = [
   }
 ]
 
-const addressPair = '0x8402d91a29511e344a23207439D6f3732Af721d6'
-
-export {abiPair, addressPair};
+export {abiPair};

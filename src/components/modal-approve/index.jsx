@@ -1,9 +1,10 @@
 import React, {memo} from 'react';
+import {toFixed} from "../../utils/fixedValue";
 import Button from "../button";
 import Modal from "../modal";
 import './index.css';
 
-const ModalApprove = ({toggleModal, onOpenModalDescription, setTransData, setIsTransFailed, meToken, getToken, meTokenValue, getTokenValue, onApprove}) => {
+const ModalApprove = ({toggleModal, onOpenModalDescription, setTransData, setIsTransFailed, meToken, getToken, priceOnoToOneToken, meTokenValue, getTokenValue, onApprove}) => {
 
   const onClick = async (e) => {
     try {
@@ -29,7 +30,7 @@ const ModalApprove = ({toggleModal, onOpenModalDescription, setTransData, setIsT
           {getTokenValue} {getToken.name}
         </div>
         <div className="approve-swap__token-price">
-          1 {meToken.name} = 1 {getToken.name}
+          1 {meToken.name} = {toFixed(priceOnoToOneToken)} {getToken.name}
         </div>
         <div className="approve-swap__token-btn">
           <Button onClick={onClick}>Approve</Button>

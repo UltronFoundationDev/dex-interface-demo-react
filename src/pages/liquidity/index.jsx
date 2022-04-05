@@ -28,6 +28,9 @@ const Liquidity = () => {
   const [priceToken2OnToken1, setPriceToken2OnToken1] = useState(0)
   const [priceToken1OnToken2, setPriceToken1OnToken2] = useState(0)
 
+  const [priceOneToOneToken1, setPriceOneToOneToken1] = useState(0)
+  const [priceOneToOneToken2, setPriceOneToOneToken2] = useState(0)
+
   const [meFocus, setMeFocus] = useState(false)
   const [getFocus, setGetFocus] = useState(false)
 
@@ -38,6 +41,8 @@ const Liquidity = () => {
     if (tokenGet && tokenMe) {
       getAmountIn(priceToken2OnToken1, [tokenGet.address, tokenMe.address], setPriceToken2OnToken1)
       getAmountOut(priceToken1OnToken2, [tokenGet.address, tokenMe.address], setPriceToken1OnToken2)
+      getAmountOut(1, [tokenGet.address, tokenMe.address], setPriceOneToOneToken1)
+      getAmountIn(1, [tokenGet.address, tokenMe.address], setPriceOneToOneToken2)
     }
   }, [tokenGet, tokenMe])
 
@@ -80,13 +85,13 @@ const Liquidity = () => {
   return (
     <div>
       <Convert value={priceToken2OnToken1} onChange={onChangeToken2OnToken1} setFocus={setMeFocus} currentValueName={tokenMe.name}
-               currentConvertValueName={tokenGet.name} convertValue={1}
+               currentConvertValueName={tokenGet.name} convertValue={priceOneToOneToken1}
                typeOpenModal={1} tokenAddress={tokenMe.address}/>
 
       {/*<img onClick={onReversalValues} className='circle-arrow' src={circleArrow} alt='circle-arrow'/>*/}
 
       <Convert value={priceToken1OnToken2} onChange={onChangeToken1OnToken2} setFocus={setGetFocus} currentValueName={tokenGet.name}
-               currentConvertValueName={tokenMe.name} convertValue={1}
+               currentConvertValueName={tokenMe.name} convertValue={priceOneToOneToken2}
                typeOpenModal={2} tokenAddress={tokenGet.address}/>
 
       <div className='app__swap-btn'>
@@ -96,6 +101,7 @@ const Liquidity = () => {
       {openModalApprove && <ModalApprove onApprove={onLiquidity} toggleModal={onOpenModalApprove}
                                          setIsTransFailed={setIsTransFailed} onOpenModalDescription={onOpenModalDescription}
                                          setTransData={setTransData}
+                                         priceOnoToOneToken={priceOneToOneToken2}
                                          getToken={tokenGet} getTokenValue={priceToken1OnToken2}
                                          meToken={tokenMe} meTokenValue={priceToken2OnToken1}/>}
 
