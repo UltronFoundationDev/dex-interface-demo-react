@@ -1,8 +1,10 @@
 import {ethers, Contract} from 'ethers';
+import {useDispatch} from "react-redux";
 import {abiFactory, addressFactory} from "../constants/contract/factory";
 import {abiPair} from "../constants/contract/pair";
 import {abiRouter, addressRouter} from "../constants/contract/router";
 import {abiToken1, tokenAddress1} from "../constants/contract/tokens";
+import {setLoader} from "../redux/reducers/loader";
 import {addToken} from "../utils/addToken";
 
 const toWei = (value) => ethers.utils.parseEther(value.toString());
@@ -33,95 +35,96 @@ const addLPToken = async (provider, Token1Address, Token2Address) => {
 }
 
 export const useLiquidity = (onNewLiquidityPosition) => {
+  const dispatch = useDispatch()
 
   const onLiquidity = async (tokenForLiquidity, tokenOnLiquidity) => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    const signer = provider.getSigner()
-    const Router = new Contract(addressRouter, abiRouter, signer)
+    try {
+      dispatch(setLoader(true))
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      const signer = provider.getSigner()
+      const Router = new Contract(addressRouter, abiRouter, signer)
 
-    const Token1 = new Contract(tokenForLiquidity.address, abiToken1, signer)
-    const Token2 = new Contract(tokenOnLiquidity.address, abiToken1, signer)
+      const Token1 = new Contract(tokenForLiquidity.address, abiToken1, signer)
+      const Token2 = new Contract(tokenOnLiquidity.address, abiToken1, signer)
 
-    const t1Approve = await Token1.approve(Router.address, MaxUint256)
-    const t2Approve = await Token2.approve(Router.address, MaxUint256)
+      const t1Approve = await Token1.approve(Router.address, MaxUint256)
+      const t2Approve = await Token2.approve(Router.address, MaxUint256)
 
-    await t1Approve.wait()
-    await t2Approve.wait()
+      await t1Approve.wait()
+      await t2Approve.wait()
 
-    const trans = await Router.addLiquidity(
-      Token1.address,
-      Token2.address,
-      toWei(tokenForLiquidity.value),
-      toWei(tokenOnLiquidity.value),
-      0,
-      0,
-      signer.getAddress(),
-      MaxUint256,
-      overrides
-    )
+      const trans = await Router.addLiquidity(
+        Token1.address,
+        Token2.address,
+        toWei(tokenForLiquidity.value),
+        toWei(tokenOnLiquidity.value),
+        0,
+        0,
+        signer.getAddress(),
+        MaxUint256,
+        overrides
+      )
 
-    await trans.wait()
+      await trans.wait()
+      dispatch(setLoader(false))
 
-    const Factory = new Contract(addressFactory, abiFactory, signer)
-    const pairAddress = await Factory.getPair(Token1.address, Token2.address)
-    await addToken(tokenOnLiquidity.value, pairAddress)
-
-    console.log(trans)
-
-    const liquidPositions = JSON.parse(localStorage.getItem('liquid-position')) ?? [];
-
-    const tokenLiquidBalance = [tokenForLiquidity.value, tokenOnLiquidity.value]
-
-    const onNewLiquid = () => {
-      const newLiquidPositions = [...liquidPositions, {
-        id: liquidPositions.length + 1,
-        nonce: trans.nonce,
-        tokens: [
-          {
-            address: Token1.address,
-            balance: tokenLiquidBalance[0],
-            name: tokenForLiquidity.name
-          },
-          {
-            address: Token2.address,
-            balance: tokenLiquidBalance[1],
-            name: tokenOnLiquidity.name
-          }
-        ]
-      }]
-      onNewLiquidityPosition(newLiquidPositions)
-    }
-
-    if (liquidPositions.length) {
-      let isLiquidPositionInArray = false;
-
-      for (let i = 0; i < liquidPositions.length; i++) {
-        const {tokens} = liquidPositions[i];
-        if (tokens[0].address === Token1.address && tokens[1].address === Token2.address) isLiquidPositionInArray = true;
-      }
-
-      if (isLiquidPositionInArray) {
-        const liquidPosition = liquidPositions.find(i => i.tokens[0].address === Token1.address && i.tokens[1].address === Token2.address)
-        const newLiquidPositions = liquidPositions.map(i => i.id === liquidPosition.id ? {
-          ...liquidPosition,
-          tokens: liquidPosition.tokens.map((t, index) => ({...t, balance: +tokenLiquidBalance[index] + +t.balance}))
-        } : i)
+      const Factory = new Contract(addressFactory, abiFactory, signer)
+      const pairAddress = await Factory.getPair(Token1.address, Token2.address)
+      await addToken(tokenOnLiquidity.value, pairAddress)
+      const liquidPositions = JSON.parse(localStorage.getItem('liquid-position')) ?? [];
+      const tokenLiquidBalance = [tokenForLiquidity.value, tokenOnLiquidity.value]
+      const onNewLiquid = () => {
+        const newLiquidPositions = [...liquidPositions, {
+          id: liquidPositions.length + 1,
+          nonce: trans.nonce,
+          tokens: [
+            {
+              address: Token1.address,
+              balance: tokenLiquidBalance[0],
+              name: tokenForLiquidity.name
+            },
+            {
+              address: Token2.address,
+              balance: tokenLiquidBalance[1],
+              name: tokenOnLiquidity.name
+            }
+          ]
+        }]
         onNewLiquidityPosition(newLiquidPositions)
+      }
+      if (liquidPositions.length) {
+        let isLiquidPositionInArray = false;
+
+        for (let i = 0; i < liquidPositions.length; i++) {
+          const {tokens} = liquidPositions[i];
+          if (tokens[0].address === Token1.address && tokens[1].address === Token2.address) isLiquidPositionInArray = true;
+        }
+
+        if (isLiquidPositionInArray) {
+          const liquidPosition = liquidPositions.find(i => i.tokens[0].address === Token1.address && i.tokens[1].address === Token2.address)
+          const newLiquidPositions = liquidPositions.map(i => i.id === liquidPosition.id ? {
+            ...liquidPosition,
+            tokens: liquidPosition.tokens.map((t, index) => ({...t, balance: +tokenLiquidBalance[index] + +t.balance}))
+          } : i)
+          onNewLiquidityPosition(newLiquidPositions)
+        } else {
+          onNewLiquid()
+        }
       } else {
         onNewLiquid()
       }
-    } else {
-      onNewLiquid()
+      await addLPToken(provider, Token1.address, Token2.address)
+      return trans
+
+    } catch (e) {
+      dispatch(setLoader(false))
+      console.log(e)
     }
-
-
-    await addLPToken(provider, Token1.address, Token2.address)
-
-    return trans
   }
 
   const onDropLiquidity = async (liquidityId, percentWithdraw = 1) => {
     try {
+      dispatch(setLoader(true))
       const liquidPosition = JSON.parse(localStorage.getItem('liquid-position')).find(i => i.id === liquidityId)
       if (!liquidPosition) return new Error('no have liquid positions')
 
@@ -156,6 +159,7 @@ export const useLiquidity = (onNewLiquidityPosition) => {
       console.log(trans)
 
       await trans.wait()
+      dispatch(setLoader(false))
 
       if (percentWithdraw === 1) {
         const liquidPositions = JSON.parse(localStorage.getItem('liquid-position'))
@@ -163,6 +167,7 @@ export const useLiquidity = (onNewLiquidityPosition) => {
         onNewLiquidityPosition(newLiquidPositions)
       }
     } catch (e) {
+      dispatch(setLoader(false))
       console.log(e)
     }
   }

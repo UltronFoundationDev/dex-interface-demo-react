@@ -34,7 +34,7 @@ const TransactionSuccess = ({transData}) => {
       The transaction was successfully
     </div>
     <div className="transaction-success__trans">
-      <a href={`https://testnet.bscscan.com/tx/${transData.hash}`}>{transData.hash}</a>
+      <a href={`https://testnet.bscscan.com/tx/${transData?.hash}`}>{transData?.hash}</a>
     </div>
   </div>
 }

@@ -1,30 +1,27 @@
 import {ethers, Contract, utils} from 'ethers';
+import {useDispatch} from "react-redux";
 import {abiFactory, addressFactory} from "../constants/contract/factory";
 import {abiPair} from "../constants/contract/pair";
 import {abiRouter, addressRouter} from "../constants/contract/router";
-import {abiToken, abiToken1} from "../constants/contract/tokens";
+import {abiToken1} from "../constants/contract/tokens";
+import {setLoader} from "../redux/reducers/loader";
 import {addToken} from "../utils/addToken";
 import {toFixed} from "../utils/fixedValue";
 import {fromWei, toWei} from "../utils/wei";
 import {contractDeploy} from "./useContractDeploy";
 
 export const useSwap = () => {
-
+  const dispatch = useDispatch()
   const onSwap = async (tokenForSwap, tokenOnSwap) => {
     try {
+      dispatch(setLoader(true))
       const provider = new ethers.providers.Web3Provider(window.ethereum)//fixme: сделать функ. для получение провайдера и сигнера
-      const reqAcc = await provider.send('eth_requestAccounts', []);
-      console.log(reqAcc)
+      await provider.send('eth_requestAccounts', []);
       const signer = provider.getSigner()
       const Router = new Contract(addressRouter, abiRouter, signer)
       const Token1 = new Contract(tokenForSwap.address, abiToken1, signer)
       const Token1Approve = await Token1.approve(Router.address, toWei(tokenForSwap.value))
-      // const Token2 = new Contract(tokenOnSwap.address, abiToken1, signer)
-      // await Token2.approve(Router.address, toWei(tokenOnSwap.value))
-
-      // console.log(await signer.getTransactionCount(Token1Approve.nonce))
       console.log(await Token1Approve.wait());
-
       const trans = await Router.swapExactTokensForTokens(
         toWei(tokenForSwap.value),
         toWei(0),
@@ -33,9 +30,11 @@ export const useSwap = () => {
         toWei(10000000)
       )
       console.log(await trans.wait());
+      dispatch(setLoader(false))
       await addToken(tokenOnSwap.value, tokenOnSwap.address)
       return trans
     } catch (err) {
+      dispatch(setLoader(false))
       console.log(err)
     }
 
@@ -46,7 +45,7 @@ export const useSwap = () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const wallet = new ethers.Wallet(privateKey, provider)
 
-    const newToken = await contractDeploy(wallet, abiToken, name, amount)
+    const newToken = await contractDeploy(wallet, abiToken1, name, amount)
     console.log(newToken)
   }
 
