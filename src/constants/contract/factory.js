@@ -209,5 +209,6 @@ const abiFactory = [
 ]
 
 const addressFactory = '0xEd1E104D560fae5F425dac7b4664eFD7ebE0c9B5'
+const addressFactory1 = '0xbDDc58a328D478e31d821D1405Ef45B778b9cD4a'
 
-export {abiFactory, addressFactory};
+export {abiFactory, addressFactory, addressFactory1};

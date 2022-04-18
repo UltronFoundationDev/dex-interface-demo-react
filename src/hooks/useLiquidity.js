@@ -1,11 +1,12 @@
 import {ethers, Contract} from 'ethers';
 import {useDispatch} from "react-redux";
-import {abiFactory, addressFactory} from "../constants/contract/factory";
+import {abiFactory, addressFactory, addressFactory1} from "../constants/contract/factory";
 import {abiPair} from "../constants/contract/pair";
-import {abiRouter, addressRouter} from "../constants/contract/router";
-import {abiToken1, tokenAddress1} from "../constants/contract/tokens";
+import {abiRouter, addressRouter, addressRouter1} from "../constants/contract/router";
+import {abiToken1,} from "../constants/contract/tokens";
 import {setLoader} from "../redux/reducers/loader";
 import {addToken} from "../utils/addToken";
+import {fromWei} from "../utils/wei";
 
 const toWei = (value) => ethers.utils.parseEther(value.toString());
 const MaxUint256 = ethers.constants.MaxUint256;
@@ -71,7 +72,7 @@ export const useLiquidity = (onNewLiquidityPosition) => {
       const Factory = new Contract(addressFactory, abiFactory, signer)
       const pairAddress = await Factory.getPair(Token1.address, Token2.address)
       await addToken(tokenOnLiquidity.value, pairAddress)
-      const liquidPositions = JSON.parse(localStorage.getItem('liquid-position')) ?? [];
+      const liquidPositions = JSON.parse(localStorage.getItem('liquid-position')) || [];
       const tokenLiquidBalance = [tokenForLiquidity.value, tokenOnLiquidity.value]
       const onNewLiquid = () => {
         const newLiquidPositions = [...liquidPositions, {
@@ -139,10 +140,10 @@ export const useLiquidity = (onNewLiquidityPosition) => {
 
       const pairAddress = await Factory.getPair(Token1.address, Token2.address)
       const pair = new Contract(pairAddress, JSON.stringify(abiPair), provider).connect(signer)
-
+      console.log(pair)
       const pairApprove = await pair.approve(Router.address, MaxUint256)
       await pairApprove.wait()
-      const expectedLiquidity = toWei(((Number(await pair.balanceOf(signer.getAddress())) / 1e18) * percentWithdraw).toFixed(7))
+      const expectedLiquidity = toWei(fromWei(await pair.balanceOf(signer.getAddress())) * percentWithdraw)
 
 
       const trans = await Router.removeLiquidity(

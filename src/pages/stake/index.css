@@ -21,3 +21,11 @@
 .farm .farm-position {
   margin-bottom: 20px;
 }
+
+.stake__convert-token {
+  margin: 0 auto 100px;
+  border: 2px solid;
+  border-radius: 20px;
+  padding: 10px 20px;
+  width: max-content;
+}

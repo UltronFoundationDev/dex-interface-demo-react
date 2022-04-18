@@ -986,5 +986,16 @@ const abiRouter = [
 ]
 
 const addressRouter = '0x19F08fa2654A394EF976B6353f1b9eb3128B8cb6'
+const addressRouter1 = '0x8402d91a29511e344a23207439d6f3732af721d6'
 
-export {abiRouter, addressRouter};
+// 0xbDDc58a328D478e31d821D1405Ef45B778b9cD4a - FACTORY
+// 0x5fe52cb3f2a4c9b7b553327745dccd460c25f1d1 - WETH
+// 0x0c3a3897e4ECB4115e26228A29b25dccC52a86aB - token1
+// 0xe37c473B8fFD02D872030B890b33F31d2cC3908F - token2
+// 0x8402d91a29511e344a23207439D6f3732Af721d6 - Router
+//
+// 0xc67dA04C58fedb50875933a4c1eDedE8C295c6BE - SPOOKY TOKEN
+//
+// 0xF5100102e87cE2Cec0682C3f9c610a691977F787 - FARM
+
+export {abiRouter, addressRouter, addressRouter1};

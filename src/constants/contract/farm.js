@@ -1,4 +1,5 @@
-const addressFarm = '0x7A7c089D4fAECf10dAf8959AB5dE2275cb6390e6'
+const addressFarm = '0xE48b0414d93F38F9A8d3B28D683396BD4696b934'
+const addressFarm1 = '0xF5100102e87cE2Cec0682C3f9c610a691977F787'
 
 const abiFarm = [
   {
@@ -582,4 +583,4 @@ const abiFarm = [
   }
 ]
 
-export {abiFarm, addressFarm}
+export {abiFarm, addressFarm, addressFarm1}
